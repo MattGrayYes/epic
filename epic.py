@@ -43,7 +43,7 @@ def create_image_urls(photos):
     urls = []
     for photo in photos:
         dt = datetime.datetime.strptime(photo["date"], "%Y-%m-%d %H:%M:%S")
-        imageurl = "https://epic.gsfc.nasa.gov/archive/natural/"+str(dt.year)+"/"+str(dt.month)+"/"+str(dt.day)+"/jpg/"+photo["image"]+".jpg"
+        imageurl = "https://epic.gsfc.nasa.gov/archive/natural/"+str(dt.year)+"/"+str(dt.month).zfill(2)+"/"+str(dt.day).zfill(2)+"/jpg/"+photo["image"]+".jpg"
         urls.append(imageurl)    
     return urls
     
