@@ -13,8 +13,8 @@ os.environ["DISPLAY"] = ":0"
 pygame.display.init()
 
 # Settings
-check_delay = 30 #minutes
-rotate_delay = 10 #seconds
+check_delay = 120 #minutes
+rotate_delay = 20 #seconds
 
 # Set up the drawing window
 screen = pygame.display.set_mode([480,480], pygame.FULLSCREEN)
@@ -51,7 +51,7 @@ def save_photos(imageurls):
     print("saving photos")
     counter=0
     for imageurl in imageurls:
-        # create a surface object, image is drawn on it.
+        # Create a surface object, draw image on it..
         image_file = io.BytesIO(urlopen(imageurl).read())
         image = pygame.image.load(image_file)
 
@@ -63,23 +63,44 @@ def save_photos(imageurls):
         pygame.image.save(cropped,"./"+str(counter)+".jpg")
         counter+=1
     print("photos saved")
-           
+
+def rotate_photos(num_photos, rotate_delay):
+    counter=0
+    while counter<num_photos:
+        # First check if anyone's tried to quit the app while we've been rotating
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                
+        # Create a surface object and draw image on it.
+        image = pygame.image.load(r"./"+str(counter)+".jpg")
+
+        # Display image
+        screen.blit(image, (0,0))
+        pygame.display.flip()
+        
+        counter+=1
+        
+        # How many seconds to wait between changing images
+        time.sleep(rotate_delay)
 
 # Run until the user asks to quit
 running = True
+first_run = True
 last_data = ""
 newest_data = ""
 last_check = datetime.datetime.now()-datetime.timedelta(hours=1)
-num_images=0
+num_photos = 0
 
 while running:
-    # Did the user click the window close button?
+    # Did anyone try to quit the app?
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            pygame.quit()
 
-
-    if last_check < datetime.datetime.now()-datetime.timedelta(minutes=check_delay):
+    # If we haven't checked for new images recently, check for new images
+    if last_check < datetime.datetime.now()-datetime.timedelta(minutes=check_delay) or first_run == True:
         print(str(datetime.datetime.now())+" Checking for new images.")
         
         last_check = datetime.datetime.now()
@@ -89,29 +110,20 @@ while running:
     
         print("OLD: "+last_data)
         print("NEW: "+newest_data)
-                        
+        
+        # If there are new images available, download them, then quickly display them all.
         if last_data != newest_data:
             print("Ooh! New Images!")
             last_data = newest_data
             imageurls = create_image_urls(json)    
             save_photos(imageurls)
             num_photos = len(imageurls)
+            rotate_photos(num_photos, 1)
         else:
             print("No new images")
 
-
-    counter=0
-    while counter<num_photos:
-        # create a surface object, image is drawn on it.
-        image = pygame.image.load(r"./"+str(counter)+".jpg")
-
-        # Display cropped image
-        screen.blit(image, (0,0))
-        pygame.display.flip()
-        
-        counter+=1
-        # How many seconds to wait between changing images
-        time.sleep(rotate_delay)
+    # Show each photo in order.
+    rotate_photos(num_photos, rotate_delay)
 
 # Done! Time to quit.
 pygame.quit()
