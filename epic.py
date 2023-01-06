@@ -12,17 +12,9 @@ import os
 os.environ["DISPLAY"] = ":0"
 pygame.display.init()
 
-
-
-#Settings
+# Settings
 check_delay = 30 #minutes
 rotate_delay = 10 #seconds
-
-
-
-
-print("Checking for new photos every "+str(check_delay)+" minutes")
-print("Rotating photos every "+str(rotate_delay)+" seconds")
 
 # Set up the drawing window
 screen = pygame.display.set_mode([480,480], pygame.FULLSCREEN)
@@ -31,6 +23,13 @@ pygame.mouse.set_visible(0)
 # Fill the background with black
 screen.fill((0,0,0))
 
+# Display loading image
+image = pygame.image.load(r"./loading.jpg")
+screen.blit(image, (0,0))
+pygame.display.flip()
+
+print("Checking for new photos every "+str(check_delay)+" minutes")
+print("Rotating photos every "+str(rotate_delay)+" seconds")
 
 def get_epic_images_json():
     # Call the epic api
@@ -66,7 +65,6 @@ def save_photos(imageurls):
     print("photos saved")
            
 
-
 # Run until the user asks to quit
 running = True
 last_data = ""
@@ -93,7 +91,7 @@ while running:
         print("NEW: "+newest_data)
                         
         if last_data != newest_data:
-            print("OOH! New Images!")
+            print("Ooh! New Images!")
             last_data = newest_data
             imageurls = create_image_urls(json)    
             save_photos(imageurls)
@@ -109,7 +107,7 @@ while running:
 
         # Display cropped image
         screen.blit(image, (0,0))
-        pygame.display.flip()        
+        pygame.display.flip()
         
         counter+=1
         # How many seconds to wait between changing images
