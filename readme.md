@@ -25,8 +25,9 @@ I'll assume you've already followed Pimoroni's instructions for getting the Hype
 1. make sure `start-epic.sh` is executable (`chmod +x start-epic.sh`)
 1. Copy the autostart file `cp epic.desktop ~pi/.config/autostart/`
 1. Install any python requirements `pip3 install -r requirements.txt`
-1. Test you can run it `python3 -u epic.py`
-	* If it doesn't work check the output for errors, and google them.
+1. Test you can run it `./start-epic.sh`
+	* If that doesn't work, test you can run it directly `python3 -u epic.py`
+	* If it still doesn't work check the output for errors, and google them.
 1. If the test works, kill it with CTRL+C
 1. Reboot and hope it runs automatically `sudo reboot`
 
