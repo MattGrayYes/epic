@@ -102,7 +102,7 @@ def rotate_photos(num_photos, rotate_delay, blend_enabled=False, blend_time=5):
         new_image = pygame.image.load(r"./"+str(counter)+".jpg")
         if counter > 1 and blend_enabled:      
             old_image = pygame.image.load(r"./"+str(counter-1)+".jpg")
-            blend_between_photos(old_image, new_image, 5)
+            blend_between_photos(old_image, new_image, blend_time)
         else:
             # Display image
             screen.blit(new_image, (0,0))
