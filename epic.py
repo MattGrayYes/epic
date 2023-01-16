@@ -15,6 +15,8 @@ pygame.display.init()
 # Settings
 check_delay = 120 #minutes
 rotate_delay = 20 #seconds
+enable_blending = True #True/False
+blending_duration = 5 #second - how long to spend blending between 2 images
 
 # Set up the drawing window
 screen = pygame.display.set_mode([480,480], pygame.FULLSCREEN)
@@ -64,7 +66,31 @@ def save_photos(imageurls):
         counter+=1
     print("photos saved")
 
-def rotate_photos(num_photos, rotate_delay):
+def blend_between_photos(old_image, new_image, target_duration):
+    print("Attempting to blend between old and new images")
+    
+    transparency = 0
+    #Place the old image down first
+    screen.blit(old_image, (0,0))
+    #Set the new image to be completely transparent
+    new_image.set_alpha(transparency)
+    screen.blit(new_image, (0,0))
+    pygame.display.flip()
+
+    while transparency < 255:
+        #Update transparency for new image
+        transparency += 1
+        new_image.set_alpha(transparency)
+
+        #Place both images down, old one first, new one with adjusted transparency second.
+        screen.blit(old_image, (0,0))
+        screen.blit(new_image, (0,0))
+        pygame.display.flip()
+        #Delay the loop to blend over the target duration (in seconds)
+        time.sleep(target_duration/255)
+
+
+def rotate_photos(num_photos, rotate_delay, blend_enabled=False, blend_time=5):
     counter=0
     while counter<num_photos:
         # First check if anyone's tried to quit the app while we've been rotating
@@ -73,12 +99,15 @@ def rotate_photos(num_photos, rotate_delay):
                 pygame.quit()
                 
         # Create a surface object and draw image on it.
-        image = pygame.image.load(r"./"+str(counter)+".jpg")
-
-        # Display image
-        screen.blit(image, (0,0))
-        pygame.display.flip()
-        
+        new_image = pygame.image.load(r"./"+str(counter)+".jpg")
+        if counter > 1 and blend_enabled:      
+            old_image = pygame.image.load(r"./"+str(counter-1)+".jpg")
+            blend_between_photos(old_image, new_image, blend_time)
+        else:
+            # Display image
+            screen.blit(new_image, (0,0))
+            pygame.display.flip()
+            
         counter+=1
         
         # How many seconds to wait between changing images
@@ -123,7 +152,7 @@ while running:
             print("No new images")
 
     # Show each photo in order.
-    rotate_photos(num_photos, rotate_delay)
+    rotate_photos(num_photos, rotate_delay, enable_blending, blending_duration)
 
 # Done! Time to quit.
 pygame.quit()
