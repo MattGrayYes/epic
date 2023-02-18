@@ -16,8 +16,9 @@ pygame.display.init()
 check_delay = 120 #minutes
 rotate_delay = 20 #seconds
 
-# Set up the drawing window
+# Set up the drawing window (remove fullscreen for testing on your workstation)
 screen = pygame.display.set_mode([480,480], pygame.FULLSCREEN)
+#screen = pygame.display.set_mode([480,480])
 pygame.mouse.set_visible(0)
 
 # Fill the background with black
@@ -86,11 +87,22 @@ def rotate_photos(num_photos, rotate_delay):
 
 # Run until the user asks to quit
 running = True
-first_run = True
 last_data = ""
 newest_data = ""
-last_check = datetime.datetime.now()-datetime.timedelta(hours=1)
+last_check = datetime.datetime.now()-datetime.timedelta(minutes=check_delay)
 num_photos = 0
+
+# Read the last image count and the last time we checked api from file
+try:
+    with open("lastCheck","r") as file: 
+        last_check = datetime.datetime.strptime(file.read(), "%d-%b-%Y (%H:%M:%S.%f)")
+    with open("numPhotos","r") as file: 
+        num_photos = int(file.read())
+    print("last check from file {}".format(last_check))
+    print("using {} old images".format(num_photos))
+except:
+    num_photos = 0
+    last_check = datetime.datetime.now()-datetime.timedelta(minutes=check_delay)
 
 while running:
     # Did anyone try to quit the app?
@@ -100,7 +112,8 @@ while running:
             pygame.quit()
 
     # If we haven't checked for new images recently, check for new images
-    if last_check < datetime.datetime.now()-datetime.timedelta(minutes=check_delay) or first_run == True:
+    if last_check < datetime.datetime.now()-datetime.timedelta(minutes=check_delay):
+        #first_run = False
         print(str(datetime.datetime.now())+" Checking for new images.")
         
         last_check = datetime.datetime.now()
@@ -121,6 +134,13 @@ while running:
             rotate_photos(num_photos, 1)
         else:
             print("No new images")
+
+        # Save variables to file
+        with open("lastCheck","w") as file: 
+            file.write(datetime.datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)"))
+
+        with open("numPhotos","w") as file: 
+            num_photos = file.write(str(num_photos)) 
 
     # Show each photo in order.
     rotate_photos(num_photos, rotate_delay)
