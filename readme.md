@@ -23,7 +23,8 @@ I'll assume you've already followed Pimoroni's instructions for getting the Hype
 1. Copy the code from this repository in
 	* `git clone https://github.com/MattGrayYes/epic.git .`
 1. make sure `start-epic.sh` is executable (`chmod +x start-epic.sh`)
-1. Copy the autostart file `cp epic.desktop ~pi/.config/autostart/`
+1. Copy the autostart file `cp epic.desktop ~pi/.config/autostart/`  
+	* The autostart folder may not exist yet `mkdir ~pi/.config/autostart/`
 1. Install any python requirements `pip3 install -r requirements.txt`
 1. Test you can run it `./start-epic.sh`
 	* If that doesn't work, test you can run it directly `python3 -u epic.py`
