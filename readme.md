@@ -11,6 +11,14 @@ It currently checks the [EPIC "Blue Marble" API](https://epic.gsfc.nasa.gov/abou
 
 This is programmed using Python3 and PyGame.
 
+## V2
+Significant changes have been made in branch v2.   
+
+- The rotation between images is now with fade
+- Touching the screen jumps to the next image
+- It is more api friendly downloading only images is doesn't already have
+- It caches images because the api sometimes only offers one?
+
 # Running It
 I've been fiddling with this for over a year now, so I've never followed these instructions in order. They're more of a guessed guideline.
 
