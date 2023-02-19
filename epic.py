@@ -180,7 +180,7 @@ except:
 fadeStep = 255/frameRate/fadeTime
 showImage = False
 imageShown = False
-lastRotation = datetime.datetime.now()
+lastRotation = datetime.datetime.now() - rotateTime
 manual = False
 currentIndex = 0
 run = True
