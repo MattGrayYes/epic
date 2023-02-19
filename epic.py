@@ -35,8 +35,11 @@ cropSize = 916
 
 # Constants, don't change these
 scanpath = r'data/*.jpg'
+if not os.path.exists('./data'):
+    os.makedirs('./data')
 
 # Setup PyGame, if a file "debug" exists run it windowed
+os.environ["DISPLAY"] = ":0"
 pygame.init()
 if(os.path.isfile("debug")):
     window = pygame.display.set_mode((480, 480))
