@@ -19,7 +19,7 @@ ageThreshold = datetime.timedelta(hours=36)
 check_delay = datetime.timedelta(hours=2)
 
 # This is the delay rotating the slowhow
-rotateTime = datetime.timedelta(seconds=5)
+rotateTime = datetime.timedelta(seconds=20)
 
 # This is how fast the loop runs 
 # and thus how much cpu is used
