@@ -119,13 +119,17 @@ def find_and_download_new_images():
     print(files)
 
     # Check for new images
-    json = get_epic_images_json()
-    imageurls = create_image_urls(json)
-    newimageurls = []
-    for url in imageurls:
-        if(os.path.basename(url) not in basefilenames):
-            newimageurls.append(url)
-    save_photos(newimageurls)
+    try:
+        json = get_epic_images_json()
+        imageurls = create_image_urls(json)
+        newimageurls = []
+        for url in imageurls:
+            if(os.path.basename(url) not in basefilenames):
+                newimageurls.append(url)
+        save_photos(newimageurls)
+    except:
+        print("There was a problem downloading and saving the images, no internet?")
+
     # Update scan list
     files = glob.glob(scanpath)
 
