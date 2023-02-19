@@ -140,7 +140,7 @@ while running:
             file.write(datetime.datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)"))
 
         with open("numPhotos","w") as file: 
-            num_photos = file.write(str(num_photos)) 
+            file.write(str(num_photos)) 
 
     # Show each photo in order.
     rotate_photos(num_photos, rotate_delay)
