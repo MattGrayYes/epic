@@ -19,11 +19,13 @@ ageThreshold = datetime.timedelta(hours=36)
 check_delay = datetime.timedelta(hours=2)
 
 # This is the delay rotating the slowhow
-rotateTime = datetime.timedelta(seconds=20)
+rotateTime = datetime.timedelta(seconds=5)
 
-# This is how fast the loop runs and thus how the fades go
-# Higher is faster, not sure of the units, 200 looked okay
-tickNumber = 200
+# This is how fast the loop runs 
+# and thus how much cpu is used
+# fadeTime in seconds
+frameRate = 15
+fadeTime = 1.0
 
 # Crop the image?
 # There some space around the earth, crop this? (pun intended)
@@ -171,6 +173,7 @@ except:
     last_check = datetime.datetime.now()-check_delay
 
 # Loop
+fadeStep = 255/frameRate/fadeTime
 showImage = False
 imageShown = False
 lastRotation = datetime.datetime.now()
@@ -178,7 +181,7 @@ manual = False
 currentIndex = 0
 run = True
 while run:
-    clock.tick(tickNumber)
+    clock.tick(frameRate)
     # Handle exit events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -190,11 +193,11 @@ while run:
     # Fading
     window.blit(background, (0, 0))
     if showImage:
-        done = blitFadeIn(window, image, (0, 0))
+        done = blitFadeIn(window, image, (0, 0), fadeStep)
         if done:
             imageShown = True
     if not showImage:
-        done = blitFadeOut(window, image, (0, 0))
+        done = blitFadeOut(window, image, (0, 0), fadeStep)
         if done:
             imageShown = False
     pygame.display.flip()
@@ -211,7 +214,6 @@ while run:
 
     # Rotate images
     if(lastRotation < datetime.datetime.now()-rotateTime or manual):
-        print("Rotating images")
         manual = False
         lastRotation = datetime.datetime.now()
         fileName,currentIndex = selectNewImage(currentIndex)
