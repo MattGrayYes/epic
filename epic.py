@@ -35,6 +35,9 @@ fadeTime = 1.0
 cropping = True
 cropSize = 916
 
+# Exit on mouse hold (seconds)
+mouse_exit_delay = 5
+
 # Constants, don't change these
 scanpath = r'data/*.jpg'
 if not os.path.exists('./data'):
@@ -184,6 +187,7 @@ lastRotation = datetime.datetime.now() - rotateTime
 manual = False
 currentIndex = 0
 run = True
+holdcounter = 0
 while run:
     clock.tick(frameRate)
     # Handle exit events
@@ -193,6 +197,13 @@ while run:
         if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
             if(done):
                 manual = True
+    # Also exit when mousebutton was held for mouse_exit_delay
+    if pygame.mouse.get_pressed()[0]: 
+        holdcounter = holdcounter + 1
+        if(holdcounter > mouse_exit_delay * frameRate):
+            run = False
+    else:
+        holdcounter = 0        
 
     # Fading
     window.blit(background, (0, 0))
