@@ -11,7 +11,7 @@ import time
 
 # Settings!
 # This is how many images to keep cached
-imageCount = 12
+imageCount = 14
 
 # This sets an age threshold for deletetion (curernt not used)
 ageThreshold = datetime.timedelta(hours=36)
