@@ -39,6 +39,10 @@ crop_extra_edge = 3
 planet_diameter_km = 12742
 camera_fov_deg = 0.62
 
+# Archive originals? (these are not autodeleted)
+# At ~165 KB an image it can fill up some disk!
+# Around 750 MB a year
+archive_originals = False
 
 # Exit on mouse hold (seconds)
 mouse_exit_delay = 5
@@ -47,6 +51,8 @@ mouse_exit_delay = 5
 scanpath = r'data/*.jpg'
 if not os.path.exists('./data'):
     os.makedirs('./data')
+if not os.path.exists('./originals'):
+    os.makedirs('./originals')
 
 # Setup PyGame, if a file "debug" exists run it windowed
 os.environ["DISPLAY"] = ":0"
@@ -99,6 +105,8 @@ def save_photos(imageurls, cropfactor=1):
         # Create a surface object, draw image on it..
         image_file = io.BytesIO(urlopen(imageurl).read())
         image = pygame.image.load(image_file)
+        if(archive_originals):
+            pygame.image.save(image, "./originals/"+os.path.basename(imageurl))
 
         if(cropping):
             # Crop to size based on cropfactor
