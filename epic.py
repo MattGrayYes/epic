@@ -5,6 +5,7 @@ import json
 import datetime
 import requests
 import io
+import math
 from urllib.request import urlopen
 import time
 
@@ -30,10 +31,14 @@ fadeTime = 1.0
 # Crop the image?
 # There some space around the earth, crop this? (pun intended)
 # Apparently the sattelite moves a bit 
-# since the crop settings from Matt Gray took of the edges
-# The original is 1080p, cropSize should be smaller (and an even number)
+# It calculates the crop factor based on the sattelite coordinates in the metadata
+# crop_extra_edge provides an amount of pixels extra room
 cropping = True
-cropSize = 916
+crop_extra_edge = 3
+# Constants for autocrop
+planet_diameter_km = 12742
+camera_fov_deg = 0.62
+
 
 # Exit on mouse hold (seconds)
 mouse_exit_delay = 5
@@ -80,12 +85,14 @@ def blitFadeOut(target, image, pos, step=2):
     return alpha == 0
 
 def get_epic_images_json():
+    """Pull the API json from NASA EPIC """    
     # Call the epic api
     response = requests.get("https://epic.gsfc.nasa.gov/api/natural")
     imjson = response.json()
     return imjson
 
-def save_photos(imageurls):
+def save_photos(imageurls, cropfactor=1):
+    """Download, crop and save the image"""
     print("saving photos")
     counter=0
     for imageurl in imageurls:
@@ -94,8 +101,10 @@ def save_photos(imageurls):
         image = pygame.image.load(image_file)
 
         if(cropping):
-            # The original is 1080 square, crop to size
-            w = cropSize
+            # Crop to size based on cropfactor
+            w = image.get_width() * cropfactor
+            if(w+crop_extra_edge <= image.get_width()):
+                w = w + crop_extra_edge
             cropped = pygame.Surface((w,w))
             cropped.blit(image,(0,0),((1080-w)/2,(1080-w)/2,w,w))
             image = pygame.transform.scale(cropped, (480,480))
@@ -112,6 +121,22 @@ def create_image_urls(photos):
         urls.append(imageurl)    
     return urls
 
+def calculateDistanceFromMetadata(imagejson):
+    """Calculate distance from the sattelite to earth in km from j2000 coordinates"""
+    x = imagejson['dscovr_j2000_position']['x']
+    y = imagejson['dscovr_j2000_position']['y']
+    z = imagejson['dscovr_j2000_position']['z']
+    # Pythagoras
+    distanceKM = math.sqrt((x*x)+(y*y)+(z*z))
+    return distanceKM
+
+def calculateCropFactorBasedOnDistance(distanceKM):
+    """Calculate the ratio image size vs earth size using known constants"""
+    # Basic trigoniometry: photo size in km = distance * tan( fov in degrees / 2 ) * 2
+    fieldWidth_km = (distanceKM * math.tan(math.radians(camera_fov_deg) / 2)) * 2
+    object_field_ratio = planet_diameter_km / fieldWidth_km
+    return object_field_ratio
+
 def find_and_download_new_images():
     # Find images   
     # absolute path to search all text files inside a specific folder
@@ -126,12 +151,15 @@ def find_and_download_new_images():
         json = get_epic_images_json()
         imageurls = create_image_urls(json)
         newimageurls = []
+        distanceKM = calculateDistanceFromMetadata(json[0])
+        cropfactor = calculateCropFactorBasedOnDistance(distanceKM)
         for url in imageurls:
             if(os.path.basename(url) not in basefilenames):
                 newimageurls.append(url)
-        save_photos(newimageurls)
-    except:
-        print("There was a problem downloading and saving the images, no internet?")
+        save_photos(newimageurls, cropfactor)
+    except Exception as e:
+        print("There was a problem downloading and saving the images, no internet? Details below:")
+        print(e)
 
     # Update scan list
     files = glob.glob(scanpath)
