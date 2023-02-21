@@ -76,7 +76,10 @@ image.set_alpha(0)
 window.blit(background, (0, 0))
 pygame.display.flip()
 
+# Functions
 def blitFadeIn(target, image, pos, step=2):
+    """Fade in function"""
+    # borrowed from here https://stackoverflow.com/a/75003503/1850429
     alpha = image.get_alpha()
     alpha = min(255, alpha + step)
     image.set_alpha(alpha)
@@ -84,6 +87,8 @@ def blitFadeIn(target, image, pos, step=2):
     return alpha == 255
 
 def blitFadeOut(target, image, pos, step=2):
+    """Fade out function"""
+    # borrowed from here https://stackoverflow.com/a/75003503/1850429
     alpha = image.get_alpha()
     alpha = max(0, alpha - step)
     image.set_alpha(alpha)
@@ -146,6 +151,7 @@ def calculateCropFactorBasedOnDistance(distanceKM):
     return object_field_ratio
 
 def find_and_download_new_images():
+    """Check data directory, check api, download and crop new images we don't have, and delete old ones"""
     # Find images   
     # absolute path to search all text files inside a specific folder
     files = glob.glob(scanpath)
@@ -173,6 +179,7 @@ def find_and_download_new_images():
     files = glob.glob(scanpath)
 
 def delete_old_images():
+    """Find and delete the oldest images"""
     files = sorted(glob.glob(scanpath))
     count = len(files)
     if(count > imageCount):
@@ -182,7 +189,7 @@ def delete_old_images():
             stamp = str(f.split('_')[-1])
             # 20230218203420
             # this bit of code makes it possible to delete by date instead of numbers
-            # curerntly not used
+            # currently not used
             date = datetime.datetime.strptime(stamp, '%Y%m%d%H%M%S')
             if date < datetime.datetime.now()-ageThreshold:
                 print("{} old: {}".format(date,f))
@@ -198,12 +205,14 @@ def delete_old_images():
         print("Less then {} images, skipping deletions".format(imageCount))
 
 def selectNewImage(currentIndex):
+    """Iterate the index through the data directory"""
     files = sorted(glob.glob(scanpath))
     currentIndex = currentIndex + 1
     if(currentIndex > len(files)-1):
         currentIndex = 0                
     return files[currentIndex],currentIndex
 
+# Startup code
 find_and_download_new_images()
 delete_old_images()
 
