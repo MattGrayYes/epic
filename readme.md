@@ -31,7 +31,7 @@ I'll assume you've already followed Pimoroni's instructions for getting the Hype
 1. Create the directory `mkdir ~pi/code/epic/`
 1. Go into the directory `cd ~pi/code/epic/`
 1. Copy the code from this repository in
-	* `git clone https://github.com/MattGrayYes/epic.git .`
+	* `git clone https://github.com/Jeroen6/epic.git .` (the dot is intentional)
 1. make sure `start-epic.sh` is executable (`chmod +x start-epic.sh`)
 1. Copy the autostart file `cp epic.desktop ~pi/.config/autostart/`  
 	* The autostart folder may not exist yet `mkdir ~pi/.config/autostart/`
