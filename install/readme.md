@@ -6,7 +6,7 @@ These two instllation scripts will help you install everything.
 2. Copy the install scripts to the boot folder.
 3. Login over SSH 
 4. Copy the scripts to the home directory
-    - `cp /boot/install-* ./"
+    - `cp /boot/install-* ./`
 5. Run `./install-epic.sh`
 6. Wait
 7. Login over SSH or USB-Shell with putty.
