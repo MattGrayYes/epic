@@ -215,20 +215,6 @@ def selectNewImage(currentIndex):
         return "no-internet.jpg",currentIndex
     return files[currentIndex],currentIndex
 
-def checkForInternet(host="8.8.8.8", port=53, timeout=3):
-    """
-    Host: 8.8.8.8 (google-public-dns-a.google.com)
-    OpenPort: 53/tcp
-    Service: domain (DNS/TCP)
-    """
-    try:
-        socket.setdefaulttimeout(timeout)
-        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
-        return True
-    except socket.error as ex:
-        print(ex)
-        return False
-
 # Startup code
 find_and_download_new_images()
 delete_old_images()
@@ -282,8 +268,8 @@ while run:
     # Scan new images
     timecompare = check_delay
     # Check more often if there are no files yet because we have no internet
-    if(checkForInternet() == False):
-        timecompare = datetime.timedelta(minutes=1)
+    if(glob.glob(scanpath) == 0):
+        timecompare = datetime.timedelta(minutes=5)
     if last_check < datetime.datetime.now()-timecompare:
         print("Checking for new images {}".format(str(datetime.datetime.now())))
         last_check = datetime.datetime.now()
