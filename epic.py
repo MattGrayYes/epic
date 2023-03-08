@@ -8,6 +8,7 @@ import io
 import math
 from urllib.request import urlopen
 import time
+import socket
 
 # Settings!
 # This is how many images to keep cached
@@ -209,7 +210,9 @@ def selectNewImage(currentIndex):
     files = sorted(glob.glob(scanpath))
     currentIndex = currentIndex + 1
     if(currentIndex > len(files)-1):
-        currentIndex = 0                
+        currentIndex = 0        
+    if(len(files) == 0):               
+        return "no-internet.jpg",currentIndex
     return files[currentIndex],currentIndex
 
 # Startup code
@@ -263,7 +266,11 @@ while run:
     pygame.display.flip()
     
     # Scan new images
-    if last_check < datetime.datetime.now()-check_delay:
+    timecompare = check_delay
+    # Check more often if there are no files yet because we have no internet
+    if(glob.glob(scanpath) == 0):
+        timecompare = datetime.timedelta(minutes=5)
+    if last_check < datetime.datetime.now()-timecompare:
         print("Checking for new images {}".format(str(datetime.datetime.now())))
         last_check = datetime.datetime.now()
         with open("lastCheck","w") as file: 
