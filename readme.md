@@ -46,7 +46,6 @@ This procedure works regardless of your host OS.
 1. Done!
 
 > If installation of comitup fails for some reason, recreate the image and do the installation in two parts, `./install-epic.sh` first over SSH. Then `./install-comitup.sh` but this time while logged in via the USB-Console.
-	
 
 ## Raspberry Pi Setup manually
 Use these instructions to only setup the EPIC program. Follow the instructions of the display on the page from Pimoroni.
@@ -67,6 +66,21 @@ Use these instructions to only setup the EPIC program. Follow the instructions o
 1. Reboot and hope it runs automatically `sudo reboot`
 1. You may want to put a copy of `start-epic.sh` on the desktop (in the middle) to restart it via the touchscreen if it crashed.
 
+## Updates
+If there are, and you want to, update the EPIC python program do the following:
+
+1. Login over USB-Console of SSH.
+2. Go to `cd ~/code/epic`
+3. Stop the program. `./stop-epic.sh`
+4. Update `git pull`
+5. Start it `./start-epic.sh &`
+
+To update the raspberry pi os itself (or comitup) run:
+
+	sudo apt update
+	sudo apt upgrade
+
+There will be many packages to update, not all are relevant. The installation script does not remove any unused programs.
 
 [1]:https://downloads.raspberrypi.org/raspios_oldstable_armhf/images/
 [2]:https://github.com/davesteele/comitup
