@@ -8,7 +8,6 @@ import io
 import math
 from urllib.request import urlopen
 import time
-import socket
 
 # Settings!
 # This is how many images to keep cached
@@ -268,7 +267,7 @@ while run:
     # Scan new images
     timecompare = check_delay
     # Check more often if there are no files yet because we have no internet
-    if(glob.glob(scanpath) == 0):
+    if(len(glob.glob(scanpath)) == 0):
         timecompare = datetime.timedelta(minutes=5)
     if last_check < datetime.datetime.now()-timecompare:
         print("Checking for new images {}".format(str(datetime.datetime.now())))
