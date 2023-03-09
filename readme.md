@@ -16,7 +16,7 @@ This is programmed using Python3 and PyGame.
 ## Other features
 Some other features have been added:
 
-- The rotation between images is now with fade
+- The rotation between images is with fade
 - Touching the screen jumps to the next image
 - Holding the mousebutton or screen >5 seconds exits the application
 - It is more api friendly downloading only images is doesn't already have
@@ -24,8 +24,32 @@ Some other features have been added:
 - It automatically crops the downloaded image to the right size.  
 *Because the DSCOVR is in an [Lissajous orbit](https://en.wikipedia.org/wiki/Lissajous_orbit) around L1 the size of the earth in the photos is variable. Code has been added to use the metadata from the api to calculate how much the crop should be.*
 
-## Raspberry Pi Setup
-I'll assume you've already followed Pimoroni's instructions for getting the Hyperpixel Round screen going.
+## Raspberry Pi Setup (lazy method)
+This procedure works regardless of your host OS.
+
+1. Create a bare Raspberry Pi (Legacy) [Debian Buster][1] image.
+	- Make sure to tell the Raspberry pi imager tool to also setup WiFi en SSH.
+1. Download and put the `./install/install-all.sh` script on the boot partition the imager just made for you on the SD card.
+1. Bring the Raspberry Pi live and login over SSH: `ssh pi@192.168....`
+1. Copy the install script to your user directory: `cp /boot/install-all.sh ./`
+1. Run it `./install-all.sh`
+	- if it complains about rights, `chmod +x ./install-all.sh`
+1. Follow on screen instructions and *wait*... It will:
+	- setup the USB-Console (the console available on the GPIO ports, over the OTG port)
+	- download and install the display drivers.
+	- download and install EPIC with python requirements.
+	- place two scripts on the desktop you can run via the touchscreen.
+	- download and install [comitup][2], a tool to be able to provision new wifi 
+	networks using your phones wifi and browser.
+		- This last step will hang your SSH session,, because the networking is re-arranged in the rpi, **just wait**, until the unit reboots. It should in a few minutes.
+1. Setup the WiFi (again, sorry) via the AP it now makes named `EPIC-###`.
+1. Done!
+
+> If installation of comitup fails for some reason, recreate the image and do the installation in two parts, `./install-epic.sh` first over SSH. Then `./install-comitup.sh` but this time while logged in via the USB-Console.
+	
+
+## Raspberry Pi Setup manually
+Use these instructions to only setup the EPIC program. Follow the instructions of the display on the page from Pimoroni.
 
 1. Use the terminal or log in as pi via ssh.
 1. Create the directory `mkdir ~pi/code/epic/`
@@ -44,3 +68,5 @@ I'll assume you've already followed Pimoroni's instructions for getting the Hype
 1. You may want to put a copy of `start-epic.sh` on the desktop (in the middle) to restart it via the touchscreen if it crashed.
 
 
+[1]:https://downloads.raspberrypi.org/raspios_oldstable_armhf/images/
+[2]:https://github.com/davesteele/comitup
