@@ -1,0 +1,17 @@
+[Unit]
+Description=Epic Globe Display
+Wants=network.target
+After=network.target
+ 
+[Service]
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/pi/.Xauthority
+ExecStart=/usr/bin/python3 /home/pi/code/epic/epic.py
+Restart=always
+RestartSec=10s
+KillMode=process
+TimeoutSec=infinity
+ 
+ 
+[Install]
+WantedBy=graphical.target
