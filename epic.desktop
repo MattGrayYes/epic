@@ -1,5 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Epic Photos
-Exec=/home/pi/code/epic/start-epic.sh
-StartupNotify=true
