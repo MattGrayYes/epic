@@ -24,10 +24,10 @@ I'll assume you've already followed Pimoroni's instructions for getting the Hype
 	* `git clone https://github.com/vwillcox/epic.git .`
 1. make sure `start-epic.sh` is executable (`chmod +x start-epic.sh`)
 1. move Service file into place
-        * `sudo cp epic.service /etc/systemd/system`
-        * `sudo systemctl daemon-reload`
-        * `sudo systemctl enable epic.service`
-        * `sudo reboot`
+	* `sudo cp epic.service /etc/systemd/system`
+	* `sudo systemctl daemon-reload`
+	* `sudo systemctl enable epic.service`
+	* `sudo reboot`
 1. On reboot the screen should load into the display with a slight delay.
 
 ## Errors running
