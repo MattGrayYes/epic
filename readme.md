@@ -22,7 +22,6 @@ I'll assume you've already followed Pimoroni's instructions for getting the Hype
 1. Go into the directory `cd ~pi/code/epic/`
 1. Copy the code from this repository in
 	* `git clone https://github.com/vwillcox/epic.git .`
-1. make sure `start-epic.sh` is executable (`chmod +x start-epic.sh`)
 1. move Service file into place
 	* `sudo cp epic.service /etc/systemd/system`
 	* `sudo systemctl daemon-reload`
