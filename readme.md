@@ -18,8 +18,9 @@ I've been fiddling with this for over a year now, so I've never followed these i
 I'll assume you've already followed Pimoroni's instructions for getting the Hyperpixel Round screen going.
 
 1. Use the terminal or log in as pi via ssh.
-1. Create the directory `mkdir ~pi/code/epic/`
-1. Go into the directory `cd ~pi/code/epic/`
+1. Create the directory `mkdir ~/code/epic/`
+1. Go into the directory `cd ~/code/epic/`
+1. Crate image directory `mkdir images`
 1. Copy the code from this repository in
 	* `git clone https://github.com/vwillcox/epic.git .`
 1. move Service file into place
